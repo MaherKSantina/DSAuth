@@ -43,7 +43,7 @@ public func authConfigure(_ config: inout Config, _ env: inout Environment, _ se
 
     // Configure migrations
     var migrations = MigrationConfig()
-    migrations.add(migration: EnableReferencesMigration.self, database: .mysql)
+//    migrations.add(migration: EnableReferencesMigration.self, database: .mysql)
     migrations.add(model: OrganizationRow.self, database: .mysql)
     migrations.add(model: UserRow.self, database: .mysql)
     migrations.add(model: RoleRow.self, database: .mysql)
