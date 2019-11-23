@@ -9,22 +9,22 @@ import Vapor
 import FluentMySQL
 import DSCore
 
-struct RoleRow {
+public struct RoleRow {
     
     enum CodingKeys: String, CodingKey, CaseIterable {
         case id
         case name
     }
     
-    var id: Int?
-    var name: String
+    public var id: Int?
+    public var name: String
 }
 
 extension RoleRow: DSModel {
 
-    static func routePath() throws -> String {
+    public static func routePath() throws -> String {
         return "role"
     }
     
-    static var entity: String = "Role"
+    public static var entity: String = "Role"
 }

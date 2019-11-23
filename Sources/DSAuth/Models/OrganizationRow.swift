@@ -9,16 +9,16 @@ import Vapor
 import FluentMySQL
 import DSCore
 
-struct OrganizationRow {
-    var id: Int?
-    var name: String
+public struct OrganizationRow {
+    public var id: Int?
+    public var name: String
 }
 
 extension OrganizationRow: DSModel {
-    static func routePath() throws -> String {
+    public static func routePath() throws -> String {
         return "organization"
     }
 
-    static var defaultDatabase: DatabaseIdentifier<MySQLDatabase>? = .mysql
-    static var entity: String = "Organization"
+    public static var defaultDatabase: DatabaseIdentifier<MySQLDatabase>? = .mysql
+    public static var entity: String = "Organization"
 }

@@ -13,7 +13,7 @@ import Authentication
 import JWT
 import DSCore
 
-struct UserRow: Content {
+public struct UserRow: Content {
     
     enum CodingKeys: String, CodingKey, CaseIterable {
         case id
@@ -21,26 +21,26 @@ struct UserRow: Content {
     }
     
     struct Registration: Content {
-        private(set) var email: String
-        private(set) var password: String
+        public private(set) var email: String
+        public private(set) var password: String
     }
     
-    struct Login: Content {
-        var email: String
-        var password: String
+    public struct Login: Content {
+        public var email: String
+        public var password: String
     }
     
-    var id: Int?
-    private(set) var email: String
+    public var id: Int?
+    public private(set) var email: String
     
 }
 
 extension UserRow: RouteNameable {
-    static func routePath() throws -> String {
+    public static func routePath() throws -> String {
         return "user"
     }
 }
 
 extension UserRow: DSModel {
-    static var entity: String = "User"
+    public static var entity: String = "User"
 }

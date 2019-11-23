@@ -7,7 +7,7 @@
 
 import Vapor
 
-struct AccessDto: Content {
-    let accessToken: String
-    let expiredAt: Date
+public struct AccessDto: Content {
+    public let accessToken: String
+    public let expiredAt: Date
 }

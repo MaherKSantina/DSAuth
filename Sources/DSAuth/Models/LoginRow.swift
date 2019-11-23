@@ -12,7 +12,7 @@ import Authentication
 import JWT
 import DSCore
 
-struct LoginRow {
+public struct LoginRow {
     
     enum CodingKeys: String, CodingKey, CaseIterable {
         case id
@@ -22,16 +22,16 @@ struct LoginRow {
         case roleID
     }
     
-    var id: Int?
-    var userID: UserRow.ID
-    var password: String
-    var organizationID: OrganizationRow.ID?
-    var roleID: RoleRow.ID
+    public var id: Int?
+    public var userID: UserRow.ID
+    public var password: String
+    public var organizationID: OrganizationRow.ID?
+    public var roleID: RoleRow.ID
     
-    struct Post: Content {
-        private(set) var email: String
-        private(set) var password: String
-        var organizationID: OrganizationRow.ID
+    public struct Post: Content {
+        public private(set) var email: String
+        public private(set) var password: String
+        public var organizationID: OrganizationRow.ID
         
 //        func user(on connection: DatabaseConnectable) -> UserRow? {
 //            return UserRow.query(on: connection).filter
@@ -42,11 +42,11 @@ struct LoginRow {
 //        return JWT(userID: userID, organizationID: organizationID)
 //    }
 //
-    struct JWT: Content {
-        private(set) var userID: UserRow.ID
-        var organizationID: OrganizationRow.ID?
+    public struct JWT: Content {
+        public private(set) var userID: UserRow.ID
+        public var organizationID: OrganizationRow.ID?
 
-        func accessDto() throws -> AccessDto {
+        public func accessDto() throws -> AccessDto {
             let accessToken = try TokenHelpers.createAccessToken(from: self)
             let expiredAt = try TokenHelpers.expiredDate(of: accessToken)
             return AccessDto(accessToken: accessToken, expiredAt: expiredAt)
@@ -55,9 +55,9 @@ struct LoginRow {
 }
 
 extension LoginRow: DSModel {
-    static func routePath() throws -> String {
+    public static func routePath() throws -> String {
         return "login"
     }
 
-    static var entity: String = "Login"
+    public static var entity: String = "Login"
 }
