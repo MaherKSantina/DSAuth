@@ -6,6 +6,8 @@
 //
 
 import Vapor
+import FluentMySQL
+import Fluent
 
 class AuthController {
 //    func login(_ req: Request) throws -> Future<AccessDto> {
@@ -17,6 +19,7 @@ class AuthController {
 //    }
 }
 
-func authLogin(email: String, password: String, organizationID: OrganizationRow.ID) {
+//func authLogin(email: String, password: String, organizationID: OrganizationRow.ID) {
 //    return User_Login
-}
+//    return UserRow.filter
+//}

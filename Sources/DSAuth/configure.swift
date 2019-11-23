@@ -72,6 +72,8 @@ public class DSAuthMain {
 
         migrations.add(migration: Login_RoleRow.self, database: .mysql)
         migrations.add(migration: User_LoginRow.self, database: .mysql)
+
+        migrations.add(migration: UniqueLoginMigration.self, database: .mysql)
         services.register(migrations)
     }
 }
