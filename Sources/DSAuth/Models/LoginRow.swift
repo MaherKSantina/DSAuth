@@ -59,7 +59,5 @@ extension LoginRow: DSModel {
         return "login"
     }
 
-    
-    static var defaultDatabase: DatabaseIdentifier<MySQLDatabase>? = .mysql
     static var entity: String = "Login"
 }

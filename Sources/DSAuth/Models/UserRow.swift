@@ -42,5 +42,5 @@ extension UserRow: RouteNameable {
 }
 
 extension UserRow: DSModel {
-
+    static var entity: String = "User"
 }
