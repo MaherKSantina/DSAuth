@@ -18,15 +18,11 @@ public protocol DSAuthDatabaseConfigurable {
     var dsAuthDatabaseTestDatabase: String { get }
 }
 
-public protocol DSAuthServerConfigurable {
-    var dsAuthServerPort: Int { get }
-}
-
 public class DSAuthMain {
 
-    let dataSource: (DSAuthDatabaseConfigurable & DSAuthServerConfigurable)
+    let dataSource: DSAuthDatabaseConfigurable
 
-    public init(dataSource: (DSAuthDatabaseConfigurable & DSAuthServerConfigurable)) {
+    public init(dataSource: DSAuthDatabaseConfigurable) {
         self.dataSource = dataSource
     }
 
@@ -51,7 +47,7 @@ public class DSAuthMain {
 
         let mysql = MySQLDatabase(config: MySQLDatabaseConfig(
             hostname: dataSource.dsAuthDatabaseHostName,
-            port: dataSource.dsAuthServerPort,
+            port: dataSource.dsAuthDatabasePort,
             username: dataSource.dsAuthDatabaseUsername,
             password: dataSource.dsAuthDatabasePassword,
             database: databaseName
@@ -69,8 +65,5 @@ public class DSAuthMain {
         migrations.add(model: RoleRow.self, database: .mysql)
         migrations.add(model: LoginRow.self, database: .mysql)
         services.register(migrations)
-
-        let serviceConfiguration = NIOServerConfig.default(hostname: "0.0.0.0", port: dataSource.dsAuthServerPort)
-        services.register(serviceConfiguration)
     }
 }
