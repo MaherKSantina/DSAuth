@@ -20,18 +20,33 @@ public struct UserRow: Content {
         case email
     }
     
-    struct Registration: Content {
+    public struct Registration: Content {
         public private(set) var email: String
         public private(set) var password: String
+
+        public init(email: String, password: String) {
+            self.email = email
+            self.password = password
+        }
     }
     
     public struct Login: Content {
         public var email: String
         public var password: String
+
+        public init(email: String, password: String) {
+            self.email = email
+            self.password = password
+        }
     }
     
     public var id: Int?
     public private(set) var email: String
+
+    public init(id: Int?, email: String) {
+        self.id = id
+        self.email = email
+    }
     
 }
 

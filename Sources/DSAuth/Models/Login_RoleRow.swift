@@ -19,6 +19,16 @@ public struct Login_RoleRow {
     
     public var Role_id: RoleRow.ID
     public var Role_name: String
+
+    public init(Login_id: Int, Login_userID: UserRow.ID, Login_password: String, Login_organizationID: OrganizationRow.ID?, Login_roleID: RoleRow.ID, Role_id: RoleRow.ID, Role_name: String) {
+        self.Login_id = Login_id
+        self.Login_userID = Login_userID
+        self.Login_password = Login_password
+        self.Login_organizationID = Login_organizationID
+        self.Login_roleID = Login_roleID
+        self.Role_id = Role_id
+        self.Role_name = Role_name
+    }
     
     public var loginRow: LoginRow {
         return LoginRow(id: Login_id, userID: Login_userID, password: Login_password, organizationID: Login_organizationID, roleID: Login_roleID)
