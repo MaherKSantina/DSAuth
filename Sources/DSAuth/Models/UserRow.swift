@@ -30,7 +30,7 @@ public struct UserRow: Content {
         }
     }
 
-    public struct Register {
+    public struct Register: Content {
         public var email: String
         public var password: String
         public var organizationID: OrganizationRow.ID?
