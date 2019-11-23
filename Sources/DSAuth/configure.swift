@@ -9,47 +9,68 @@ import Foundation
 import Vapor
 import FluentMySQL
 
-/// Called before your application initializes.
-public func authConfigure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
-    // Register providers first
-    try services.register(FluentProvider())
-    try services.register(MySQLProvider())
+public protocol DSAuthDatabaseConfigurable {
+    var dsAuthDatabaseHostName: String { get }
+    var dsAuthDatabasePort: Int { get }
+    var dsAuthDatabaseUsername: String { get }
+    var dsAuthDatabasePassword: String { get }
+    var dsAuthDatabaseDatabase: String { get }
+    var dsAuthDatabaseTestDatabase: String { get }
+}
 
-    var commandConfig = CommandConfig.default()
-    commandConfig.useFluentCommands()
-    services.register(commandConfig)
+public protocol DSAuthServerConfigurable {
+    var dsAuthServerPort: Int { get }
+}
 
-    var databases = DatabasesConfig()
+public class DSAuthMain {
 
-    var databaseName: String = ""
-    switch env {
-    case .testing:
-        databaseName = Configuration.Database.testDatabase
-    default:
-        databaseName = Configuration.Database.database
+    let dataSource: (DSAuthDatabaseConfigurable & DSAuthServerConfigurable)
+
+    public init(dataSource: (DSAuthDatabaseConfigurable & DSAuthServerConfigurable)) {
+        self.dataSource = dataSource
     }
 
-    let mysql = MySQLDatabase(config: MySQLDatabaseConfig(
-        hostname: Configuration.Database.hostName,
-        port: Configuration.Database.port,
-        username: Configuration.Database.username,
-        password: Configuration.Database.password,
-        database: databaseName
+    public func authConfigure(_ config: inout Config, _ env: inout Environment, _ services: inout Services) throws {
+        // Register providers first
+        try services.register(FluentProvider())
+        try services.register(MySQLProvider())
+
+        var commandConfig = CommandConfig.default()
+        commandConfig.useFluentCommands()
+        services.register(commandConfig)
+
+        var databases = DatabasesConfig()
+
+        var databaseName: String = ""
+        switch env {
+        case .testing:
+            databaseName = dataSource.dsAuthDatabaseTestDatabase
+        default:
+            databaseName = dataSource.dsAuthDatabaseDatabase
+        }
+
+        let mysql = MySQLDatabase(config: MySQLDatabaseConfig(
+            hostname: dataSource.dsAuthDatabaseHostName,
+            port: dataSource.dsAuthServerPort,
+            username: dataSource.dsAuthDatabaseUsername,
+            password: dataSource.dsAuthDatabasePassword,
+            database: databaseName
+            )
         )
-    )
-    databases.add(database: mysql, as: .mysql)
-    services.register(databases)
+        databases.add(database: mysql, as: .mysql)
+        services.register(databases)
 
 
-    // Configure migrations
-    var migrations = MigrationConfig()
-//    migrations.add(migration: EnableReferencesMigration.self, database: .mysql)
-    migrations.add(model: OrganizationRow.self, database: .mysql)
-    migrations.add(model: UserRow.self, database: .mysql)
-    migrations.add(model: RoleRow.self, database: .mysql)
-    migrations.add(model: LoginRow.self, database: .mysql)
-    services.register(migrations)
+        // Configure migrations
+        var migrations = MigrationConfig()
+        migrations.add(migration: EnableReferencesMigration.self, database: .mysql)
+        migrations.add(model: OrganizationRow.self, database: .mysql)
+        migrations.add(model: UserRow.self, database: .mysql)
+        migrations.add(model: RoleRow.self, database: .mysql)
+        migrations.add(model: LoginRow.self, database: .mysql)
+        services.register(migrations)
 
-    let serviceConfiguration = NIOServerConfig.default(hostname: "0.0.0.0", port: Configuration.Server.port)
-    services.register(serviceConfiguration)
+        let serviceConfiguration = NIOServerConfig.default(hostname: "0.0.0.0", port: dataSource.dsAuthServerPort)
+        services.register(serviceConfiguration)
+    }
 }
