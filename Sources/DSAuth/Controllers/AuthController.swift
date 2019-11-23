@@ -16,3 +16,7 @@ class AuthController {
 //            .map{ try $0.accessDto() }
 //    }
 }
+
+func authLogin(email: String, password: String, organizationID: OrganizationRow.ID) {
+//    return User_Login
+}

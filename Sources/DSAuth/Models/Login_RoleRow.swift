@@ -29,6 +29,10 @@ public struct Login_RoleRow {
         self.Role_id = Role_id
         self.Role_name = Role_name
     }
+
+    public func role() throws -> RoleRowValue {
+        return try RoleRowValue(id: Role_id)
+    }
     
     public var loginRow: LoginRow {
         return LoginRow(id: Login_id, userID: Login_userID, password: Login_password, organizationID: Login_organizationID, roleID: Login_roleID)

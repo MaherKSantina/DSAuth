@@ -60,6 +60,7 @@ public class DSAuthMain {
         // Configure migrations
         var migrations = MigrationConfig()
         migrations.add(migration: EnableReferencesMigration.self, database: .mysql)
+        migrations.add(migration: RolesMigration.self, database: .mysql)
         migrations.add(model: OrganizationRow.self, database: .mysql)
         migrations.add(model: UserRow.self, database: .mysql)
         migrations.add(model: RoleRow.self, database: .mysql)
