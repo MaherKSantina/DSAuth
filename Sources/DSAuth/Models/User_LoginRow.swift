@@ -59,6 +59,15 @@ public struct User_LoginRow {
         
         return User_LoginRow.query(onlyOne: true).withParameters(parameters: parameters).one(on: conn)
     }
+
+    public static func find(email: String, organizationID: OrganizationRow.ID?, on conn: Container) -> Future<User_LoginRow?> {
+        let parameters: [QueryParameter] = [
+            DSQueryParameter(key: "User_email", operation: .equal, value: email),
+            DSQueryParameter.from(key: "Login_organizationID", operation: .equal, value: organizationID)
+        ]
+
+        return User_LoginRow.query(onlyOne: true).withParameters(parameters: parameters).one(on: conn)
+    }
 }
 
 extension User_LoginRow: TwoModelJoin {

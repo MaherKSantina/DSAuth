@@ -19,17 +19,7 @@ public struct UserRow: Content {
         case id
         case email
     }
-    
-    public struct Registration: Content {
-        public private(set) var email: String
-        public private(set) var password: String
 
-        public init(email: String, password: String) {
-            self.email = email
-            self.password = password
-        }
-    }
-    
     public struct Login: Content {
         public var email: String
         public var password: String
@@ -39,6 +29,18 @@ public struct UserRow: Content {
             self.password = password
         }
     }
+
+    public struct Register {
+        public var email: String
+        public var password: String
+        public var organizationID: OrganizationRow.ID?
+
+        public init(email: String, password: String, organizationID: OrganizationRow.ID?) {
+            self.email = email
+            self.password = password
+            self.organizationID = organizationID
+        }
+    }
     
     public var id: Int?
     public private(set) var email: String
@@ -46,6 +48,15 @@ public struct UserRow: Content {
     public init(id: Int?, email: String) {
         self.id = id
         self.email = email
+    }
+
+    public func saveIfNotExist(on conn: DatabaseConnectable) -> Future<UserRow> {
+        return UserRow.query(on: conn).filter(\.email == email).first().flatMap { (user) -> EventLoopFuture<UserRow> in
+            guard let user = user else {
+                return UserRow(id: nil, email: self.email).save(on: conn)
+            }
+            return conn.future(user)
+        }
     }
     
 }

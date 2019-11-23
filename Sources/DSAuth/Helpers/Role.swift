@@ -19,4 +19,8 @@ public enum RoleRowValue: String, CaseIterable {
         }
         self = RoleRowValue.allCases[id-1]
     }
+
+    public var index: Int? {
+        return RoleRowValue.allCases.firstIndex(where: { $0 == self })
+    }
 }
