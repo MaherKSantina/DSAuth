@@ -39,9 +39,9 @@ public struct LoginRow {
     public struct Post: Content {
         public private(set) var email: String
         public private(set) var password: String
-        public var organizationID: OrganizationRow.ID
+        public var organizationID: OrganizationRow.ID?
 
-        public init(email: String, password: String, organizationID: OrganizationRow.ID) {
+        public init(email: String, password: String, organizationID: OrganizationRow.ID?) {
             self.email = email
             self.password = password
             self.organizationID = organizationID
