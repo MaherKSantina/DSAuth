@@ -11,6 +11,8 @@ import FluentMySQL
 
 public class DSAuthMain {
 
+    public init() { }
+
     public func authConfigure(migrations: inout MigrationConfig) {
         migrations.add(migration: EnableReferencesMigration.self, database: .mysql)
 
