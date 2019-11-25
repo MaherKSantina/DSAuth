@@ -78,4 +78,24 @@ public class DSAuthMain {
         migrations.add(migration: UniqueLoginMigration.self, database: .mysql)
         services.register(migrations)
     }
+
+    public func authConfigure(migrations: inout MigrationConfig) {
+        migrations.add(migration: EnableReferencesMigration.self, database: .mysql)
+
+        migrations.add(model: UserRow.self, database: .mysql)
+
+        migrations.add(model: OrganizationRow.self, database: .mysql)
+
+        migrations.add(model: RoleRow.self, database: .mysql)
+        migrations.add(migration: RolesMigration.self, database: .mysql)
+
+        migrations.add(model: LoginRow.self, database: .mysql)
+
+        migrations.add(migration: LoginOnOrganizationMigration.self, database: .mysql)
+
+        migrations.add(migration: Login_RoleRow.self, database: .mysql)
+        migrations.add(migration: User_LoginRow.self, database: .mysql)
+
+        migrations.add(migration: UniqueLoginMigration.self, database: .mysql)
+    }
 }
