@@ -17,7 +17,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/fluent-mysql.git", from: "3.0.1"),
         .package(url: "https://github.com/vapor/jwt.git", from: "3.0.0"),
         .package(url: "https://github.com/vapor/auth.git", from: "2.0.3"),
-        .package(url: "git@github.com:MaherKSantina/DSCore.git", from: "0.1.5"),
+        .package(url: "git@github.com:MaherKSantina/DSCore.git", from: "0.1.7"),
     ],
     targets: [
         // Targets are the basic building blocks of a package. A target can define a module or a test suite.
