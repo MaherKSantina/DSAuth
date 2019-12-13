@@ -1,6 +1,5 @@
 import XCTest
 @testable import DSAuth
-import Vapor
 import FluentMySQL
 
 final class DSAuthTests: WMSTestCase {
@@ -23,7 +22,7 @@ final class DSAuthTests: WMSTestCase {
 
     func testRegister_NewUser_NewLogin_OrganizationDoesntExist_ShouldShowError() throws {
         do {
-            let _ = try authRegister(user: UserRow.Register(email: "maher.santina90@gmail.com", password: "123456", organizationID: 1), on: conn, container: app).wait()
+            let _ = try DSAuthMain.register(user: UserRow.Register(email: "maher.santina90@gmail.com", password: "123456", organizationID: 1), on: conn, container: app).wait()
             XCTFail()
         }
         catch {
@@ -35,14 +34,14 @@ final class DSAuthTests: WMSTestCase {
 
     func testRegister_NewUser_NewLogin_OrganizationExists_ShouldRegisterProperly() throws {
         let org = try OrganizationRow(id: nil, name: "Org 1").save(on: conn).wait()
-        let _ = try authRegister(user: UserRow.Register(email: "maher.santina90@gmail.com", password: "123456", organizationID: try org.requireID()), on: conn, container: app).wait()
+        let _ = try DSAuthMain.register(user: UserRow.Register(email: "maher.santina90@gmail.com", password: "123456", organizationID: try org.requireID()), on: conn, container: app).wait()
     }
 
     func testRegister_ExistingUser_NewLogin_ShouldRegisterProperly() throws {
         let org = try OrganizationRow(id: nil, name: "Org 1").save(on: conn).wait()
         let _ = try UserRow(id: nil, email: "maher.santina90@gmail.com").save(on: conn).wait()
         let newUser = UserRow.Register(email: "maher.santina90@gmail.com", password: "123123", organizationID: try org.requireID())
-        let _ = try authRegister(user: newUser, on: conn, container: app).wait()
+        let _ = try DSAuthMain.register(user: newUser, on: conn, container: app).wait()
         let users = try UserRow.query(on: conn).all().wait()
         XCTAssertEqual(users.count, 1)
         let logins = try LoginRow.query(on: conn).all().wait()
@@ -56,7 +55,7 @@ final class DSAuthTests: WMSTestCase {
         let _ = try LoginRow(id: nil, userID: try user.requireID(), password: "123123", organizationID: try org.requireID(), roleID: 1).save(on: conn).wait()
 
         let newUser = UserRow.Register(email: "maher.santina90@gmail.com", password: "123123", organizationID: try org.requireID())
-        let _ = try authRegister(user: newUser, on: conn, container: app).wait()
+        let _ = try DSAuthMain.register(user: newUser, on: conn, container: app).wait()
         }
         catch {
             let e = error as! MySQLError
@@ -69,7 +68,7 @@ final class DSAuthTests: WMSTestCase {
         let user = try UserRow(id: nil, email: "maher.santina90@gmail.com").save(on: conn).wait()
         let _ = try LoginRow(id: nil, userID: try user.requireID(), password: "123123", organizationID: try org.requireID(), roleID: 1).save(on: conn).wait()
 
-        let accessDto = try authLogin(user: LoginRow.Post(email: "maher.santina90@gmail.com", password: "123123", organizationID: try org.requireID()), on: app).wait()
+        let accessDto = try DSAuthMain.login(user: LoginRow.Post(email: "maher.santina90@gmail.com", password: "123123", organizationID: try org.requireID()), on: app).wait()
 
         let userFromToken = try TokenHelpers.getUser(fromPayloadOf: accessDto.accessToken)
         XCTAssertEqual(userFromToken.organizationID, try org.requireID())

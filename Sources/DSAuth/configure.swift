@@ -13,7 +13,7 @@ public class DSAuthMain {
 
     public init() { }
 
-    public func authConfigure(migrations: inout MigrationConfig) {
+    public static func configure(migrations: inout MigrationConfig) {
         migrations.add(migration: EnableReferencesMigration.self, database: .mysql)
 
         migrations.add(model: UserRow.self, database: .mysql)

@@ -27,8 +27,7 @@ public func configure(_ config: inout Config, _ env: inout Environment, _ servic
     databases.add(database: mysql, as: .mysql)
     services.register(databases)
 
-    let auth = DSAuthMain()
     var migrations = MigrationConfig()
-    auth.authConfigure(migrations: &migrations)
+    DSAuthMain.configure(migrations: &migrations)
     services.register(migrations)
 }
