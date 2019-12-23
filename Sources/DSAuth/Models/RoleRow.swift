@@ -9,7 +9,7 @@ import Vapor
 import FluentMySQL
 import DSCore
 
-public struct RoleRow {
+public struct RoleRow: MySQLModel {
     
     enum CodingKeys: String, CodingKey, CaseIterable {
         case id

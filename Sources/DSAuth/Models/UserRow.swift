@@ -13,7 +13,7 @@ import Authentication
 import JWT
 import DSCore
 
-public struct UserRow: Content {
+public struct UserRow: MySQLModel, Content {
     
     enum CodingKeys: String, CodingKey, CaseIterable {
         case id
@@ -59,12 +59,6 @@ public struct UserRow: Content {
         }
     }
     
-}
-
-extension UserRow: RouteNameable {
-    public static func routePath() throws -> String {
-        return "user"
-    }
 }
 
 extension UserRow: DSModel {

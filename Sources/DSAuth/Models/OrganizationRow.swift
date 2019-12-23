@@ -9,7 +9,7 @@ import Vapor
 import FluentMySQL
 import DSCore
 
-public struct OrganizationRow {
+public struct OrganizationRow: MySQLModel {
     public var id: Int?
     public var name: String
 

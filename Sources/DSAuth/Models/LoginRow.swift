@@ -12,7 +12,7 @@ import Authentication
 import JWT
 import DSCore
 
-public struct LoginRow {
+public struct LoginRow: MySQLModel {
     
     enum CodingKeys: String, CodingKey, CaseIterable {
         case id
