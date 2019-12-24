@@ -50,27 +50,35 @@ public struct User_LoginRow {
         return LoginRow.JWT(userID: Login_userID, organizationID: Login_organizationID)
     }
     
-    public static func find(email: String, password: String, organizationID: OrganizationRow.ID?, on conn: Container) -> Future<User_LoginRow?> {
-        let parameters: [QueryParameter] = [
-            DSQueryParameter(key: "User_email", operation: .equal, value: email),
-            DSQueryParameter(key: "Login_password", operation: .equal, value: password),
-            DSQueryParameter.from(key: "Login_organizationID", operation: .equal, value: organizationID)
-        ]
+    public static func find(email: String, password: String? = nil, organizationID: OrganizationRow.ID? = nil, on conn: DatabaseConnectable) -> Future<User_LoginRow?> {
+        let parameters: [String: Any?] = [
+            "User_email": email,
+            "Login_password": password,
+            "Login_organizationID": organizationID
+            ]
+
+        let string = parameters.map({ (key, value) -> String in
+            var newValue: String
+            switch value {
+            case .none:
+                newValue = " is null"
+            case let x where x is String:
+                newValue = " = '\(x!)' "
+            default:
+                newValue = " = \(value!)"
+            }
+            return "\(key) \(newValue)"
+        }).joined(separator: " AND ")
         
-        return User_LoginRow.query(onlyOne: true).withParameters(parameters: parameters).one(on: conn)
-    }
-
-    public static func find(email: String, organizationID: OrganizationRow.ID?, on conn: Container) -> Future<User_LoginRow?> {
-        let parameters: [QueryParameter] = [
-            DSQueryParameter(key: "User_email", operation: .equal, value: email),
-            DSQueryParameter.from(key: "Login_organizationID", operation: .equal, value: organizationID)
-        ]
-
-        return User_LoginRow.query(onlyOne: true).withParameters(parameters: parameters).one(on: conn)
+        return User_LoginRow.first(where: string, req: conn)
     }
 }
 
-extension User_LoginRow: TwoModelJoin {
+extension User_LoginRow: DSTwoModelView {
+    public static var entity: String {
+        return tableName
+    }
+
     
     public typealias Model1 = UserRow
     public typealias Model2 = LoginRow
@@ -86,8 +94,4 @@ extension User_LoginRow: TwoModelJoin {
     public static var join: JoinRelationship {
         return JoinRelationship(type: .inner, key1: UserRow.CodingKeys.id.rawValue, key2: LoginRow.CodingKeys.userID.rawValue)
     }
-}
-
-extension User_LoginRow: DSModelView {
-    public typealias Database = MySQLDatabase
 }

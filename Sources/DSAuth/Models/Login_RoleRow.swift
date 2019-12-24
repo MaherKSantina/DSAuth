@@ -45,19 +45,13 @@ public struct Login_RoleRow {
     public var JWT: LoginRow.JWT {
         return LoginRow.JWT(userID: Login_userID, organizationID: Login_organizationID)
     }
-    
-    public static func find(userID: UserRow.ID, organizationID: OrganizationRow.ID?, on conn: Container) -> Future<Login_RoleRow?> {
-        
-        let parameters = [
-            DSQueryParameter(key: "Login_userID", operation: .equal, value: userID),
-            DSQueryParameter.from(key: "Login_organizationID", operation: .equal, value: organizationID)
-        ]
-        
-        return Login_RoleRow.query(onlyOne: true).withParameters(parameters: parameters).one(on: conn)
-    }
 }
 
-extension Login_RoleRow: TwoModelJoin {
+extension Login_RoleRow: DSTwoModelView {
+    public static var entity: String {
+        return tableName
+    }
+
     public typealias Model1 = LoginRow
     public typealias Model2 = RoleRow
     
@@ -72,9 +66,5 @@ extension Login_RoleRow: TwoModelJoin {
     public static var join: JoinRelationship {
         return JoinRelationship(type: .inner, key1: Model1.CodingKeys.roleID.rawValue, key2: Model2.CodingKeys.id.rawValue)
     }
-}
-
-extension Login_RoleRow: DSModelView {
-    public typealias Database = MySQLDatabase
 }
 
