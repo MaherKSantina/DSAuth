@@ -63,8 +63,8 @@ extension Login_RoleRow: DSTwoModelView {
         return RoleRow.CodingKeys.allCases.map{ $0.rawValue }
     }
     
-    public static var join: JoinRelationship {
-        return JoinRelationship(type: .inner, key1: Model1.CodingKeys.roleID.rawValue, key2: Model2.CodingKeys.id.rawValue)
+    public static var join: DSJoinRelationship {
+        return DSJoinRelationship(type: .inner, key1: Model1.CodingKeys.roleID.rawValue, key2: Model2.CodingKeys.id.rawValue)
     }
 }
 

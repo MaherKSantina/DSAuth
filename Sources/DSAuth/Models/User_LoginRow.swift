@@ -91,7 +91,7 @@ extension User_LoginRow: DSTwoModelView {
         return LoginRow.CodingKeys.allCases.map{ $0.rawValue }
     }
     
-    public static var join: JoinRelationship {
-        return JoinRelationship(type: .inner, key1: UserRow.CodingKeys.id.rawValue, key2: LoginRow.CodingKeys.userID.rawValue)
+    public static var join: DSJoinRelationship {
+        return DSJoinRelationship(type: .inner, key1: UserRow.CodingKeys.id.rawValue, key2: LoginRow.CodingKeys.userID.rawValue)
     }
 }
